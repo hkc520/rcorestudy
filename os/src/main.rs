@@ -87,14 +87,18 @@ fn clear_bss() {
 fn show_logo() {
     println!(
         r#"
- .d88888b.                     .d88888b.   .d8888b.
-d88P" "Y88b 888               d88P" "Y88b d88P  Y88b
-888     888 888               888     888 Y88b.
-888         888d88b.  .d88b.8 888     888  "Y888b.
-888         888PY888 d8P""Y88 888     888     "Y88b.
-888     888 888  888 888  888 888     888       "888
-Y88b. .d88P 888  888 Y8b..d88 Y88b. .d88P Y88b  d88P
- "Y88888P"  888  888  "Y88P`8b "Y88888P"   "Y8888P" 
+    mmmm     mmmm                                                          .d88888b.   .d8888b.
+    mmmmm   mmmmm                         kk                              d88P" "Y88b d88P  Y88b
+   mm  mm   mm  mm                        kk                              888     888 Y88b.
+   mm  mm   mm  mm     ooooo     nnnnnn   kk  kk     eeeee    yyy    yy   888     888  "Y888b.
+  mmm   mm mmm  mmm   oo   oo   nn    nn  kk kk    eee   eee   yy    yy   888     888     "Y88b.
+  mmm    mmmm   mmm  oo     oo  nn    nn  kkkk     eeeeeeeee   yy    yy   888     888       "888
+ mmm      mmm    mmm  oo   oo   nn    nn  kk kkk   eee         yyy  yyy   Y88b. .d88P Y88b  d88P
+ mmm      mmm    mmm   ooooo    nn    nn  kk   kkk  eeeeeee     yyyyyyy    "Y88888P"   "Y8888P" 
+                                                                    yyy
+                                                                    yyy  
+                                                               yyyyyyy
+
 "#
     );
 }
