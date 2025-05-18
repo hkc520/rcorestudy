@@ -3,3 +3,5 @@ tools
 mount.img
 riscv64-linux-musl-cross
 riscv64-linux-musl-cross.tgz
+kernel-la
+kernel-rv
