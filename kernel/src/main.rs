@@ -35,10 +35,12 @@ mod utils;
 
 use crate::tasks::current_user_task;
 use crate::user::task_ilegal;
+use alloc::sync::Arc;
 use core::hint::spin_loop;
 use devices::{self, get_int_device, PAGE_SIZE, VIRT_ADDR_START};
 use executor::current_task;
 use fs::file::File;
+use fs::FileType;
 use polyhal::common::PageAlloc;
 use polyhal::irq::IRQ;
 use polyhal::mem::{get_fdt, get_mem_areas};
@@ -141,11 +143,14 @@ fn kernel_interrupt(cx_ref: &mut TrapFrame, trap_type: TrapType) {
 /// The kernel entry
 fn main(hart_id: usize) {
     IRQ::int_disable();
+    println!("猴子1号，你好！");
     // Ensure this is the first core
     runtime::init();
+    println!("猴子1号，你好！");
 
     let str = include_str!("banner.txt");
     println!("{}", str);
+    println!("猴子1号，你好！");
 
     polyhal::common::init(&PageAllocImpl);
     get_mem_areas().cloned().for_each(|(start, size)| {
@@ -154,7 +159,7 @@ fn main(hart_id: usize) {
     });
 
     println!("run kernel @ hart {}", hart_id);
-
+    println!("猴子1号，你好！");
     extern "C" {
         fn _start();
         fn _end();
@@ -166,7 +171,7 @@ fn main(hart_id: usize) {
 
     // Boot all application core.
     // polyhal::multicore::MultiCore::boot_all();
-
+    println!("猴子1号，你好！");
     devices::prepare_drivers();
 
     if let Ok(fdt) = get_fdt() {
@@ -174,12 +179,13 @@ fn main(hart_id: usize) {
             devices::try_to_add_device(&node);
         }
     }
-
+    println!("猴子1号，你好！");
     // get devices and init
     devices::regist_devices_irq();
 
     // TODO: test ebreak
     // Instruction::ebreak();
+    println!("猴子1号，你好！");
 
     // initialize filesystem
     fs::init();
@@ -189,22 +195,72 @@ fn main(hart_id: usize) {
             .mkdir("tmp")
             .expect("can't create tmp dir");
     }
-
+    // 输出根目录下的文件
+    /*  println!("根目录下的文件列表：");
+    let root_dir = File::open("/".into(), OpenFlags::O_DIRECTORY).expect("无法打开根目录");
+    match root_dir.read_dir() {
+        Ok(entries) => {
+            for entry in entries {
+                println!(
+                    "{} ({})",
+                    entry.filename,
+                    match entry.file_type {
+                        FileType::File => "文件",
+                        FileType::Directory => "目录",
+                        FileType::Device => "设备",
+                        FileType::Socket => "套接字",
+                        FileType::Link => "链接",
+                    }
+                );
+            }
+        }
+        Err(e) => println!("读取目录失败: {:?}", e),
+    }*/
+    println!("猴子1号，你好！");
     // enable interrupts
     IRQ::int_enable();
+    println!("猴子2号，你好！");
 
+    /* println!("musl目录内容：");
+    let musl_dir = File::open("/musl".into(), OpenFlags::O_DIRECTORY).expect("无法打开musl目录");
+    match musl_dir.read_dir() {
+        Ok(entries) => {
+            for entry in entries {
+                println!(
+                    "{} ({})",
+                    entry.filename,
+                    match entry.file_type {
+                        FileType::File => "文件",
+                        FileType::Directory => "目录",
+                        FileType::Device => "设备",
+                        FileType::Socket => "套接字",
+                        FileType::Link => "链接",
+                    }
+                );
+            }
+        }
+        Err(e) => println!("读取musl目录失败: {:?}", e),
+    }*/
     // cache task with task templates
-    tasks::exec::cache_task_template("/busybox".into()).expect("can't cache task");
-    tasks::exec::cache_task_template("/runtest.exe".into()).expect("can't cache task");
-    tasks::exec::cache_task_template("/entry-static.exe".into()).expect("can't cache task");
-    tasks::exec::cache_task_template("/libc.so".into()).expect("can't cache task");
-    tasks::exec::cache_task_template("/lua".into()).expect("can't cache task");
+    // tasks::exec::cache_task_template("/musl/busybox".into()).expect("can't cache task");
+    //tasks::exec::cache_task_template("/runtest.exe".into()).expect("can't cache task");
+    //tasks::exec::cache_task_template("/entry-static.exe".into()).expect("can't cache task");
+    //tasks::exec::cache_task_template("/libc.so".into()).expect("can't cache task");
+    //tasks::exec::cache_task_template("/lua".into()).expect("can't cache task");
     // tasks::exec::cache_task_template("/lmbench_all").expect("can't cache task");
 
     // init kernel threads and async executor
+    //tasks::init();
+    //log::info!("run tasks");
+    // loop { arch::wfi() }
     tasks::init();
     log::info!("run tasks");
-    // loop { arch::wfi() }
+    println!("猴子1000号，你好！");
+    //let current_task = current_user_task();
+    // Open the /musl directory
+    //let musl_dir = File::open("/musl".into(), OpenFlags::O_DIRECTORY).expect("无法打开/musl目录");
+    // Change the current directory to /musl
+    //current_task.pcb.lock().curr_dir = Arc::new(musl_dir);
     tasks::run_tasks();
 
     println!("Task All Finished!");

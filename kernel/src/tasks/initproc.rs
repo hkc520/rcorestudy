@@ -1,5 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
+use crate::tasks::current_user_task;
+use alloc::sync::Arc;
 use alloc::{
     string::{String, ToString},
     vec::Vec,
@@ -65,21 +67,22 @@ async fn command(cmd: &str) {
 
 pub async fn initproc() {
     println!("start kernel tasks");
-    // command("./runtest.exe -w entry-dynamic.exe argv").await;
-    // command("./entry-dynamic.exe argv").await;
-    // command("busybox echo run time-test").await;
-    // command("time-test").await;
+    //command("/musl/busybox ls /").await;
+    //command("/musl/busybox ls /bin").await;
+    //command("/musl/runtest.exe -w entry-dynamic.exe argv").await;
+    //command("/musl/entry-dynamic.exe argv").await;
+    //command("/musl/busybox echo run time-test").await;
+    //command("/musl/time-test").await;
 
-    // command("busybox sh basic/run-all.sh").await;
-
-    // command("busybox echo run netperf_testcode.sh").await;
+    //command("/musl/busybox sh basic/run-all.sh").await;
+    //command("busybox echo run netperf_testcode.sh").await;
     // command("busybox sh netperf_testcode.sh").await;
 
-    // command("busybox echo run busybox_testcode.sh").await;
+    //command("busybox echo run busybox_testcode.sh").await;
     // command("busybox sh busybox_testcode.sh").await;
 
     // command("busybox echo run libctest_testcode.sh").await;
-    // command("busybox sh libctest_testcode.sh").await;
+    //command("/musl/busybox sh ").await;
     // command("runtest.exe -w entry-static.exe utime").await;
     // command("busybox ln -s /busybox /bin/cat").await;
     // command("./bin/cat libctest_testcode.sh").await;
@@ -89,12 +92,23 @@ pub async fn initproc() {
     // command("busybox ln -s /busybox /bin/xz").await;
     // command("busybox ls -l /bin").await;
     // command("busybox sh init.sh").await;
-    // command("busybox ls -l /bin").await;
+    ///command("/musl/busybox ls -l /bin").await;
+    command("/musl/busybox sh ").await;
+    //command("/musl/busybox sh /musl/libctest_testcode.sh").await; //有错误
+    //command("busybox sh libctest_testcode.sh");
+    // Get the current user task
 
-    command("busybox sh").await;
-    // command("busybox echo run lua_testcode.sh").await;
-    // command("busybox sh lua_testcode.sh").await;
-
+    // Execute the script with relative paths
+    // Execute the script with relative paths
+    // 获取当前用户任务
+    //let current_task = current_user_task();
+    // 打开 /musl 目录
+    // let musl_dir = File::open("/musl".into(), OpenFlags::O_DIRECTORY).expect("无法打开musl目录");
+    // 将当前目录设置为 /musl
+    // current_task.pcb.lock().curr_dir = Arc::new(musl_dir);
+    // 执行脚本，使用相对路径
+    // command("./busybox sh ./basic_testcode.sh").await;
+    // command("/musl/busybox sh -c 'cd /musl && ./busybox sh ./basic_testcode.sh'").await;
     // command("busybox init").await;
     // command("busybox sh").await;
     // command("busybox sh init.sh").await;
@@ -102,8 +116,6 @@ pub async fn initproc() {
     // command("busybox echo run cyclic_testcode.sh").await;
     // command("busybox sh cyclictest_testcode.sh").await;
     // kill_all_tasks().await;
-
-    // command("libc-bench").await;
 
     // command("busybox echo run iperf_testcode.sh").await;
     // command("busybox sh iperf_testcode.sh").await;
