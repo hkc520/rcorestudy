@@ -15,6 +15,14 @@ use vfscore::INodeInterface;
 
 use crate::tasks::add_user_task;
 
+use executor::AsyncTask;
+
+use crate::tasks::exec_with_process;
+use crate::user::entry::user_entry;
+use alloc::sync::Weak;
+use executor::thread;
+use fs::pathbuf::PathBuf;
+
 use super::UserTask;
 
 fn clear() {
@@ -37,7 +45,7 @@ async fn kill_all_tasks() {
     });
 }
 
-async fn command(cmd: &str) {
+/*async fn command(cmd: &str) {
     let mut args: Vec<&str> = cmd.split(" ").filter(|x| *x != "").collect();
     debug!("cmd: {}  args: {:?}", cmd, args);
     let filename = args.drain(..1).last().unwrap();
@@ -58,6 +66,47 @@ async fn command(cmd: &str) {
             // syscall(SYS_WAIT4, [0,0,0,0,0,0,0])
             //     .await
             //     .expect("can't wait a pid");
+        }
+        Err(_) => {
+            println!("unknown command: {}", cmd);
+        }
+    }
+}*/
+async fn command(cmd: &str, work_dir: PathBuf) {
+    let mut args: Vec<&str> = cmd.split(" ").filter(|x| *x != "").collect();
+    debug!("cmd: {}  args: {:?}", cmd, args);
+    let filename = args.drain(..1).last().unwrap();
+    match File::open(filename.into(), OpenFlags::O_RDONLY) {
+        Ok(_) => {
+            info!("exec: {}", filename);
+            let mut args_extend = vec![filename];
+            args_extend.extend(args.into_iter());
+
+            // Use custom working directory to create task
+            let curr_task = current_task();
+            let task = UserTask::new(Weak::new(), work_dir);
+            task.before_run();
+            exec_with_process(
+                task.clone(),
+                PathBuf::new(),
+                String::from(filename),
+                args_extend.into_iter().map(String::from).collect(),
+                Vec::<&str>::new().into_iter().map(String::from).collect(),
+            )
+            .await
+            .expect("can't add task to excutor");
+            curr_task.before_run();
+            let task_id = task.get_task_id();
+            thread::spawn(task.clone(), user_entry());
+
+            let task = tid2task(task_id).unwrap();
+            loop {
+                if task.exit_code().is_some() {
+                    release_task(task_id);
+                    break;
+                }
+                yield_now().await;
+            }
         }
         Err(_) => {
             println!("unknown command: {}", cmd);
@@ -93,7 +142,9 @@ pub async fn initproc() {
     // command("busybox ls -l /bin").await;
     // command("busybox sh init.sh").await;
     ///command("/musl/busybox ls -l /bin").await;
-    command("/musl/busybox sh ").await;
+    let home_dir = PathBuf::from("/musl");
+    command("/musl/busybox sh libctest_testcode.sh", home_dir).await;
+    //command("/musl/busybox sh ").await;
     //command("/musl/busybox sh /musl/libctest_testcode.sh").await; //有错误
     //command("busybox sh libctest_testcode.sh");
     // Get the current user task

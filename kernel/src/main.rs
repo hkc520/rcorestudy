@@ -143,14 +143,14 @@ fn kernel_interrupt(cx_ref: &mut TrapFrame, trap_type: TrapType) {
 /// The kernel entry
 fn main(hart_id: usize) {
     IRQ::int_disable();
-    println!("猴子1号，你好！");
+    //println!("猴子1号，你好！");
     // Ensure this is the first core
     runtime::init();
-    println!("猴子1号，你好！");
+    //println!("猴子1号，你好！");
 
     let str = include_str!("banner.txt");
     println!("{}", str);
-    println!("猴子1号，你好！");
+    //println!("猴子1号，你好！");
 
     polyhal::common::init(&PageAllocImpl);
     get_mem_areas().cloned().for_each(|(start, size)| {
@@ -159,7 +159,7 @@ fn main(hart_id: usize) {
     });
 
     println!("run kernel @ hart {}", hart_id);
-    println!("猴子1号，你好！");
+    //println!("猴子1号，你好！");
     extern "C" {
         fn _start();
         fn _end();
@@ -171,7 +171,7 @@ fn main(hart_id: usize) {
 
     // Boot all application core.
     // polyhal::multicore::MultiCore::boot_all();
-    println!("猴子1号，你好！");
+    //println!("猴子1号，你好！");
     devices::prepare_drivers();
 
     if let Ok(fdt) = get_fdt() {
@@ -179,13 +179,13 @@ fn main(hart_id: usize) {
             devices::try_to_add_device(&node);
         }
     }
-    println!("猴子1号，你好！");
+    //println!("猴子1号，你好！");
     // get devices and init
     devices::regist_devices_irq();
 
     // TODO: test ebreak
     // Instruction::ebreak();
-    println!("猴子1号，你好！");
+    //println!("猴子1号，你好！");
 
     // initialize filesystem
     fs::init();
@@ -216,10 +216,10 @@ fn main(hart_id: usize) {
         }
         Err(e) => println!("读取目录失败: {:?}", e),
     }*/
-    println!("猴子1号，你好！");
+    // println!("猴子1号，你好！");
     // enable interrupts
     IRQ::int_enable();
-    println!("猴子2号，你好！");
+    // println!("猴子2号，你好！");
 
     /* println!("musl目录内容：");
     let musl_dir = File::open("/musl".into(), OpenFlags::O_DIRECTORY).expect("无法打开musl目录");
