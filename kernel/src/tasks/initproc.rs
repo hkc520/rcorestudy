@@ -143,7 +143,7 @@ pub async fn initproc() {
     // command("busybox sh init.sh").await;
     ///command("/musl/busybox ls -l /bin").await;
     let home_dir = PathBuf::from("/musl");
-    command("/musl/busybox sh libctest_testcode.sh", home_dir).await;
+    command("/musl/busybox sh ", home_dir).await;
     //command("/musl/busybox sh ").await;
     //command("/musl/busybox sh /musl/libctest_testcode.sh").await; //有错误
     //command("busybox sh libctest_testcode.sh");
