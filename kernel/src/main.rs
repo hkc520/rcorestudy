@@ -215,13 +215,13 @@ fn main(hart_id: usize) {
             }
         }
         Err(e) => println!("读取目录失败: {:?}", e),
-    }*/
+    }
     // println!("猴子1号，你好！");
     // enable interrupts
     IRQ::int_enable();
     // println!("猴子2号，你好！");
 
-    /* println!("musl目录内容：");
+    println!("musl目录内容：");
     let musl_dir = File::open("/musl".into(), OpenFlags::O_DIRECTORY).expect("无法打开musl目录");
     match musl_dir.read_dir() {
         Ok(entries) => {
@@ -240,6 +240,92 @@ fn main(hart_id: usize) {
             }
         }
         Err(e) => println!("读取musl目录失败: {:?}", e),
+    }
+    println!("glibc目录内容：");
+    let musl_dir = File::open("/glibc".into(), OpenFlags::O_DIRECTORY).expect("无法打开glibc目录");
+    match musl_dir.read_dir() {
+        Ok(entries) => {
+            for entry in entries {
+                println!(
+                    "{} ({})",
+                    entry.filename,
+                    match entry.file_type {
+                        FileType::File => "文件",
+                        FileType::Directory => "目录",
+                        FileType::Device => "设备",
+                        FileType::Socket => "套接字",
+                        FileType::Link => "链接",
+                    }
+                );
+            }
+        }
+        Err(e) => println!("读取glibc目录失败: {:?}", e),
+    }
+
+    println!("musl basic目录内容：");
+    let musl_dir =
+        File::open("/musl/basic".into(), OpenFlags::O_DIRECTORY).expect("无法打开musl/basic目录");
+    match musl_dir.read_dir() {
+        Ok(entries) => {
+            for entry in entries {
+                println!(
+                    "{} ({})",
+                    entry.filename,
+                    match entry.file_type {
+                        FileType::File => "文件",
+                        FileType::Directory => "目录",
+                        FileType::Device => "设备",
+                        FileType::Socket => "套接字",
+                        FileType::Link => "链接",
+                    }
+                );
+            }
+        }
+        Err(e) => println!("读取musl/basic目录失败: {:?}", e),
+    }
+
+    println!("musl lib目录内容：");
+    let musl_dir =
+        File::open("/musl/lib".into(), OpenFlags::O_DIRECTORY).expect("无法打开musl/lib目录");
+    match musl_dir.read_dir() {
+        Ok(entries) => {
+            for entry in entries {
+                println!(
+                    "{} ({})",
+                    entry.filename,
+                    match entry.file_type {
+                        FileType::File => "文件",
+                        FileType::Directory => "目录",
+                        FileType::Device => "设备",
+                        FileType::Socket => "套接字",
+                        FileType::Link => "链接",
+                    }
+                );
+            }
+        }
+        Err(e) => println!("读取musl/lib目录失败: {:?}", e),
+    }
+
+    println!("musl/ltp目录内容：");
+    let musl_dir =
+        File::open("/musl/ltp".into(), OpenFlags::O_DIRECTORY).expect("无法打开musl/ltp目录");
+    match musl_dir.read_dir() {
+        Ok(entries) => {
+            for entry in entries {
+                println!(
+                    "{} ({})",
+                    entry.filename,
+                    match entry.file_type {
+                        FileType::File => "文件",
+                        FileType::Directory => "目录",
+                        FileType::Device => "设备",
+                        FileType::Socket => "套接字",
+                        FileType::Link => "链接",
+                    }
+                );
+            }
+        }
+        Err(e) => println!("读取musl/ltp目录失败: {:?}", e),
     }*/
     // cache task with task templates
     // tasks::exec::cache_task_template("/musl/busybox".into()).expect("can't cache task");

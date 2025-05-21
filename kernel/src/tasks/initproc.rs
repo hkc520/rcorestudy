@@ -143,8 +143,41 @@ pub async fn initproc() {
     // command("busybox sh init.sh").await;
     ///command("/musl/busybox ls -l /bin").await;
     let home_dir = PathBuf::from("/musl");
-    command("/musl/busybox sh ", home_dir).await;
-    //command("/musl/busybox sh ").await;
+    command("/musl/busybox sh libctest_testcode.sh", home_dir.clone()).await;
+    command("/musl/busybox sh busybox_testcode.sh", home_dir.clone()).await;
+    command("/musl/busybox sh cyclictest_testcode.sh", home_dir.clone()).await;
+    command("/musl/busybox sh unixbench_testcode.sh", home_dir.clone()).await;
+    command("/musl/busybox sh lmbench_testcode.sh", home_dir.clone()).await;
+    command("/musl/busybox sh run-dynamic.sh", home_dir.clone()).await;
+    command("/musl/busybox sh run-static.sh", home_dir.clone()).await;
+    command("/musl/busybox sh run-dynamic-all.sh", home_dir.clone()).await;
+    command("/musl/busybox sh iperf_testcode.sh", home_dir.clone()).await;
+    command("/musl/busybox sh multi.sh", home_dir.clone()).await;
+    command("/musl/busybox sh libctest_testcode.sh", home_dir.clone()).await;
+    command("/musl/busybox sh run-dynamic-all.sh", home_dir.clone()).await;
+    command("/musl/busybox sh run-static-all.sh", home_dir.clone()).await;
+    command("/musl/busybox sh iozone_testcode.sh", home_dir.clone()).await;
+    command("/musl/busybox sh lua_testcode.sh", home_dir.clone()).await;
+    command("/musl/busybox sh basic_testcode.sh", home_dir.clone()).await;
+    //let home_dir = PathBuf::from("/glibc");
+    //command("/glibc/busybox sh", home_dir.clone()).await;
+    /*command("/glibc/busybox sh libctest_testcode.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh busybox_testcode.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh cyclictest_testcode.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh unixbench_testcode.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh lmbench_testcode.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh run-dynamic.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh run-static.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh run-dynamic-all.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh iperf_testcode.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh multi.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh libctest_testcode.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh run-dynamic-all.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh run-static-all.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh iozone_testcode.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh lua_testcode.sh", home_dir.clone()).await;
+    command("/glibc/busybox sh basic_testcode.sh", home_dir.clone()).await;*/
+    // command("/musl/busybox sh", home_dir).await;
     //command("/musl/busybox sh /musl/libctest_testcode.sh").await; //有错误
     //command("busybox sh libctest_testcode.sh");
     // Get the current user task

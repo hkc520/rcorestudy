@@ -133,7 +133,7 @@ pub fn init_task_stack(
     // push stack
     let envp = vec![
         "LD_LIBRARY_PATH=/",
-        "PS1=\x1b[1m\x1b[32mByteOS\x1b[0m:\x1b[1m\x1b[34m\\w\x1b[0m\\$ \0",
+        "PS1=\x1b[1m\x1b[32mMonkeyOS\x1b[0m:\x1b[1m\x1b[34m\\w\x1b[0m\\$ \0",
         "PATH=/:/bin:/usr/bin",
         "UB_BINDIR=./",
     ];
