@@ -156,24 +156,6 @@ pub async fn initproc() {
         home_dir.clone(),
     )
     .await;*/
-    let home_dir = PathBuf::from("/musl");
-    command("/musl/busybox sh libctest_testcode.sh", home_dir.clone()).await;
-    command("/musl/busybox sh busybox_testcode.sh", home_dir.clone()).await;
-    command("/musl/busybox sh cyclictest_testcode.sh", home_dir.clone()).await;
-    command("/musl/busybox sh unixbench_testcode.sh", home_dir.clone()).await;
-    command("/musl/busybox sh lmbench_testcode.sh", home_dir.clone()).await;
-    command("/musl/busybox sh run-dynamic.sh", home_dir.clone()).await;
-    command("/musl/busybox sh run-static.sh", home_dir.clone()).await;
-    command("/musl/busybox sh run-dynamic-all.sh", home_dir.clone()).await;
-    command("/musl/busybox sh iperf_testcode.sh", home_dir.clone()).await;
-    command("/musl/busybox sh multi.sh", home_dir.clone()).await;
-    command("/musl/busybox sh libctest_testcode.sh", home_dir.clone()).await;
-    command("/musl/busybox sh run-dynamic-all.sh", home_dir.clone()).await;
-    command("/musl/busybox sh run-static-all.sh", home_dir.clone()).await;
-    command("/musl/busybox sh iozone_testcode.sh", home_dir.clone()).await;
-    command("/musl/busybox sh lua_testcode.sh", home_dir.clone()).await;
-
-    command("/musl/busybox sh basic_testcode.sh", home_dir.clone()).await;
     let home_dir = PathBuf::from("/musl/basic");
     command(
         "/musl/busybox echo #### OS COMP TEST GROUP START basic-musl-musl ####",
@@ -186,6 +168,23 @@ pub async fn initproc() {
         home_dir.clone(),
     )
     .await;
+    let home_dir = PathBuf::from("/musl");
+    command("/musl/busybox sh libctest_testcode.sh", home_dir.clone()).await;
+    command("/musl/busybox sh busybox_testcode.sh", home_dir.clone()).await;
+    command("/musl/busybox sh lua_testcode.sh", home_dir.clone()).await;
+    command("/musl/busybox sh run-dynamic-all.sh", home_dir.clone()).await;
+    command("/musl/busybox sh run-static-all.sh", home_dir.clone()).await;
+    command("/musl/busybox sh run-dynamic.sh", home_dir.clone()).await;
+    command("/musl/busybox sh run-static.sh", home_dir.clone()).await;
+    command("/musl/busybox sh cyclictest_testcode.sh", home_dir.clone()).await;
+    // command("/musl/busybox sh unixbench_testcode.sh", home_dir.clone()).await;
+    //command("/musl/busybox sh lmbench_testcode.sh", home_dir.clone()).await;
+    // command("/musl/busybox sh iperf_testcode.sh", home_dir.clone()).await;
+    // command("/musl/busybox sh multi.sh", home_dir.clone()).await;
+    // command("/musl/busybox sh iozone_testcode.sh", home_dir.clone()).await;
+
+    //command("/musl/busybox sh basic_testcode.sh", home_dir.clone()).await;
+
     // command("/musl/busybox sh", home_dir.clone()).await;
     //let home_dir = PathBuf::from("/glibc");
     //command("/glibc/busybox sh", home_dir.clone()).await;
@@ -253,6 +252,7 @@ pub async fn initproc() {
 
     // switch_to_kernel_page_table();
     println!("!TEST FINISH!");
+    shutdown();
 
     // Shutdown if there just have blankkernel task.
     if TASK_MAP
