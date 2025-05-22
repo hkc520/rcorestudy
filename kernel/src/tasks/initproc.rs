@@ -168,6 +168,17 @@ pub async fn initproc() {
         home_dir.clone(),
     )
     .await;
+    command(
+        "/musl/busybox echo #### OS COMP TEST GROUP START basic-musl ####",
+        home_dir.clone(),
+    )
+    .await;
+    command("/musl/busybox sh /musl/basic/run-all.sh", home_dir.clone()).await;
+    command(
+        "/musl/busybox echo #### OS COMP TEST GROUP END basic-musl ####",
+        home_dir.clone(),
+    )
+    .await;
     let home_dir = PathBuf::from("/musl");
     command("/musl/busybox sh libctest_testcode.sh", home_dir.clone()).await;
     command("/musl/busybox sh busybox_testcode.sh", home_dir.clone()).await;
