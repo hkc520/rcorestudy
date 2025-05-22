@@ -81,14 +81,15 @@ async fn command(cmd: &str, work_dir: PathBuf) {
             info!("exec: {}", filename);
             let mut args_extend = vec![filename];
             args_extend.extend(args.into_iter());
-
+            // 在这里克隆 work_dir，以便后续使用
+            let work_dir_clone = work_dir.clone();
             // Use custom working directory to create task
             let curr_task = current_task();
             let task = UserTask::new(Weak::new(), work_dir);
             task.before_run();
             exec_with_process(
                 task.clone(),
-                PathBuf::new(),
+                work_dir_clone, // 使用传入的工作目录，而不是空的PathBuf
                 String::from(filename),
                 args_extend.into_iter().map(String::from).collect(),
                 Vec::<&str>::new().into_iter().map(String::from).collect(),
@@ -142,6 +143,19 @@ pub async fn initproc() {
     // command("busybox ls -l /bin").await;
     // command("busybox sh init.sh").await;
     ///command("/musl/busybox ls -l /bin").await;
+    //let home_dir = PathBuf::from("/");
+    // command(
+    //     "/musl/busybox ln -sf /musl/busybox /bin/ls",
+    //     home_dir.clone(),
+    // )
+    // .await;
+    //let home_dir = PathBuf::from("/musl");
+
+    /*command(
+        "/musl/busybox ln -s /musl/busybox /bin/ls",
+        home_dir.clone(),
+    )
+    .await;*/
     let home_dir = PathBuf::from("/musl");
     command("/musl/busybox sh libctest_testcode.sh", home_dir.clone()).await;
     command("/musl/busybox sh busybox_testcode.sh", home_dir.clone()).await;
@@ -158,7 +172,21 @@ pub async fn initproc() {
     command("/musl/busybox sh run-static-all.sh", home_dir.clone()).await;
     command("/musl/busybox sh iozone_testcode.sh", home_dir.clone()).await;
     command("/musl/busybox sh lua_testcode.sh", home_dir.clone()).await;
+
     command("/musl/busybox sh basic_testcode.sh", home_dir.clone()).await;
+    let home_dir = PathBuf::from("/musl/basic");
+    command(
+        "/musl/busybox echo #### OS COMP TEST GROUP START basic-musl-musl ####",
+        home_dir.clone(),
+    )
+    .await;
+    command("/musl/busybox sh /musl/basic/run-all.sh", home_dir.clone()).await;
+    command(
+        "/musl/busybox echo #### OS COMP TEST GROUP END basic-musl-musl ####",
+        home_dir.clone(),
+    )
+    .await;
+    // command("/musl/busybox sh", home_dir.clone()).await;
     //let home_dir = PathBuf::from("/glibc");
     //command("/glibc/busybox sh", home_dir.clone()).await;
     /*command("/glibc/busybox sh libctest_testcode.sh", home_dir.clone()).await;
@@ -177,11 +205,13 @@ pub async fn initproc() {
     command("/glibc/busybox sh iozone_testcode.sh", home_dir.clone()).await;
     command("/glibc/busybox sh lua_testcode.sh", home_dir.clone()).await;
     command("/glibc/busybox sh basic_testcode.sh", home_dir.clone()).await;*/
-    // command("/musl/busybox sh", home_dir).await;
+
+    //command("/musl/busybox sh", home_dir.clone()).await;
+
     //command("/musl/busybox sh /musl/libctest_testcode.sh").await; //有错误
     //command("busybox sh libctest_testcode.sh");
     // Get the current user task
-
+    //command("/musl/busybox sh run-dynamic.sh", home_dir.clone()).await;
     // Execute the script with relative paths
     // Execute the script with relative paths
     // 获取当前用户任务

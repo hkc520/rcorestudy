@@ -209,7 +209,7 @@ pub async fn exec_with_process(
         if let Some(header) = header {
             if let Ok(SegmentData::Undefined(_data)) = header.get_data(&elf) {
                 drop(frame_ppn);
-                let mut new_args = vec![String::from("libc.so")];
+                let mut new_args = vec![String::from("/musl/lib/libc.so")];
                 new_args.extend(args);
                 return exec_with_process(task, curr_dir, new_args[0].clone(), new_args, envp)
                     .await;

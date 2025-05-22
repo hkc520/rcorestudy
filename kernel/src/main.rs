@@ -327,13 +327,32 @@ fn main(hart_id: usize) {
         }
         Err(e) => println!("读取musl/ltp目录失败: {:?}", e),
     }*/
+    println!("bin目录内容：");
+    let musl_dir = File::open("/bin".into(), OpenFlags::O_DIRECTORY).expect("无法打开bin目录");
+    match musl_dir.read_dir() {
+        Ok(entries) => {
+            for entry in entries {
+                println!(
+                    "{} ({})",
+                    entry.filename,
+                    match entry.file_type {
+                        FileType::File => "文件",
+                        FileType::Directory => "目录",
+                        FileType::Device => "设备",
+                        FileType::Socket => "套接字",
+                        FileType::Link => "链接",
+                    }
+                );
+            }
+        }
+        Err(e) => println!("读取bin目录失败: {:?}", e),
+    }
     // cache task with task templates
-    // tasks::exec::cache_task_template("/musl/busybox".into()).expect("can't cache task");
-    //tasks::exec::cache_task_template("/runtest.exe".into()).expect("can't cache task");
-    //tasks::exec::cache_task_template("/entry-static.exe".into()).expect("can't cache task");
-    //tasks::exec::cache_task_template("/libc.so".into()).expect("can't cache task");
-    //tasks::exec::cache_task_template("/lua".into()).expect("can't cache task");
-    // tasks::exec::cache_task_template("/lmbench_all").expect("can't cache task");
+    //tasks::exec::cache_task_template("/musl/busybox".into()).expect("can't cache task");
+    // tasks::exec::cache_task_template("/runtest.exe".into()).expect("can't cache task");
+    //  tasks::exec::cache_task_template("/entry-static.exe".into()).expect("can't cache task");
+    //tasks::exec::cache_task_template("/musl/lib/libc.so".into()).expect("can't cache task");
+    // tasks::exec::cache_task_template("/lua".into()).expect("can't cache task");tasks::exec::cache_task_template("/lmbench_all").expect("can't cache task");
 
     // init kernel threads and async executor
     //tasks::init();
