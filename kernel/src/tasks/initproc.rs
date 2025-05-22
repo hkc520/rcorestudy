@@ -157,7 +157,7 @@ pub async fn initproc() {
     )
     .await;*/
     let home_dir = PathBuf::from("/musl/basic");
-    command(
+    /*  command(
         "/musl/busybox echo #### OS COMP TEST GROUP START basic-musl-musl ####",
         home_dir.clone(),
     )
@@ -167,7 +167,7 @@ pub async fn initproc() {
         "/musl/busybox echo #### OS COMP TEST GROUP END basic-musl-musl ####",
         home_dir.clone(),
     )
-    .await;
+    .await;*/
     command(
         "/musl/busybox echo #### OS COMP TEST GROUP START basic-musl ####",
         home_dir.clone(),
