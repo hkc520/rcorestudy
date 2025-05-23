@@ -14,8 +14,8 @@ use polyhal::{debug_console::DebugConsole, instruction::shutdown};
 use vfscore::INodeInterface;
 
 use crate::tasks::add_user_task;
-
 use executor::AsyncTask;
+use sync::Mutex;
 
 use crate::tasks::exec_with_process;
 use crate::user::entry::user_entry;
@@ -25,6 +25,16 @@ use fs::pathbuf::PathBuf;
 
 use super::UserTask;
 
+/*Add：全局配置libc.so的路径 */
+static LIBC_PATH: Mutex<String> = Mutex::new(String::new());
+
+pub fn set_libc_path(path: String) {
+    *LIBC_PATH.lock() = path;
+}
+
+pub fn get_libc_path() -> String {
+    LIBC_PATH.lock().clone()
+}
 fn clear() {
     DebugConsole::putchar(0x1b);
     DebugConsole::putchar(0x5b);
@@ -116,6 +126,7 @@ async fn command(cmd: &str, work_dir: PathBuf) {
 }
 
 pub async fn initproc() {
+    set_libc_path("/musl/lib/libc.so".to_string());
     println!("start kernel tasks");
     //command("/musl/busybox ls /").await;
     //command("/musl/busybox ls /bin").await;
@@ -157,6 +168,8 @@ pub async fn initproc() {
     )
     .await;*/
     let home_dir = PathBuf::from("/musl/basic");
+    command("/musl/busybox sh ", home_dir.clone()).await;
+
     /*  command(
         "/musl/busybox echo #### OS COMP TEST GROUP START basic-musl-musl ####",
         home_dir.clone(),
@@ -168,32 +181,32 @@ pub async fn initproc() {
         home_dir.clone(),
     )
     .await;*/
-    command(
-        "/musl/busybox echo #### OS COMP TEST GROUP START basic-musl ####",
-        home_dir.clone(),
-    )
-    .await;
-    command("/musl/busybox sh /musl/basic/run-all.sh", home_dir.clone()).await;
-    command(
-        "/musl/busybox echo #### OS COMP TEST GROUP END basic-musl ####",
-        home_dir.clone(),
-    )
-    .await;
-    let home_dir = PathBuf::from("/musl");
-    command("/musl/busybox sh libctest_testcode.sh", home_dir.clone()).await;
-    command("/musl/busybox sh busybox_testcode.sh", home_dir.clone()).await;
-    command("/musl/busybox sh lua_testcode.sh", home_dir.clone()).await;
-    command("/musl/busybox sh run-dynamic-all.sh", home_dir.clone()).await;
-    command("/musl/busybox sh run-static-all.sh", home_dir.clone()).await;
-    command("/musl/busybox sh run-dynamic.sh", home_dir.clone()).await;
-    command("/musl/busybox sh run-static.sh", home_dir.clone()).await;
-    command("/musl/busybox sh cyclictest_testcode.sh", home_dir.clone()).await;
-    // command("/musl/busybox sh unixbench_testcode.sh", home_dir.clone()).await;
-    //command("/musl/busybox sh lmbench_testcode.sh", home_dir.clone()).await;
-    // command("/musl/busybox sh iperf_testcode.sh", home_dir.clone()).await;
-    // command("/musl/busybox sh multi.sh", home_dir.clone()).await;
-    // command("/musl/busybox sh iozone_testcode.sh", home_dir.clone()).await;
-
+    /*  command(
+            "/musl/busybox echo #### OS COMP TEST GROUP START basic-musl ####",
+            home_dir.clone(),
+        )
+        .await;
+        command("/musl/busybox sh /musl/basic/run-all.sh", home_dir.clone()).await;
+        command(
+            "/musl/busybox echo #### OS COMP TEST GROUP END basic-musl ####",
+            home_dir.clone(),
+        )
+        .await;
+        let home_dir = PathBuf::from("/musl");
+        command("/musl/busybox sh libctest_testcode.sh", home_dir.clone()).await;
+        command("/musl/busybox sh busybox_testcode.sh", home_dir.clone()).await;
+        command("/musl/busybox sh lua_testcode.sh", home_dir.clone()).await;
+        command("/musl/busybox sh run-dynamic-all.sh", home_dir.clone()).await;
+        command("/musl/busybox sh run-static-all.sh", home_dir.clone()).await;
+        command("/musl/busybox sh run-dynamic.sh", home_dir.clone()).await;
+        command("/musl/busybox sh run-static.sh", home_dir.clone()).await;
+        command("/musl/busybox sh cyclictest_testcode.sh", home_dir.clone()).await;
+        // command("/musl/busybox sh unixbench_testcode.sh", home_dir.clone()).await;
+        //command("/musl/busybox sh lmbench_testcode.sh", home_dir.clone()).await;
+        // command("/musl/busybox sh iperf_testcode.sh", home_dir.clone()).await;
+        // command("/musl/busybox sh multi.sh", home_dir.clone()).await;
+        // command("/musl/busybox sh iozone_testcode.sh", home_dir.clone()).await;
+    */
     //command("/musl/busybox sh basic_testcode.sh", home_dir.clone()).await;
 
     // command("/musl/busybox sh", home_dir.clone()).await;

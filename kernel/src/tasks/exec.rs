@@ -1,4 +1,5 @@
 use super::UserTask;
+use crate::tasks::initproc::get_libc_path;
 use crate::{
     consts::USER_DYN_ADDR,
     tasks::{
@@ -20,7 +21,6 @@ use polyhal::MappingFlags;
 use sync::Mutex;
 use syscalls::Errno;
 use xmas_elf::program::{SegmentData, Type};
-
 pub struct TaskCacheTemplate {
     name: PathBuf,
     entry: usize,
@@ -209,7 +209,7 @@ pub async fn exec_with_process(
         if let Some(header) = header {
             if let Ok(SegmentData::Undefined(_data)) = header.get_data(&elf) {
                 drop(frame_ppn);
-                let mut new_args = vec![String::from("/musl/lib/libc.so")];
+                let mut new_args = vec![String::from(&get_libc_path())];
                 new_args.extend(args);
                 return exec_with_process(task, curr_dir, new_args[0].clone(), new_args, envp)
                     .await;

@@ -1,3 +1,6 @@
+use crate::tasks::initproc::get_libc_path; // Add this import
+use crate::{consts::USER_STACK_INIT_SIZE, tasks::memset::MemType};
+use crate::{consts::USER_STACK_TOP, syscall::types::elf::elf};
 use alloc::{collections::BTreeMap, string::String, sync::Arc, vec::Vec};
 use devices::PAGE_SIZE;
 use executor::AsyncTask;
@@ -11,9 +14,6 @@ use xmas_elf::{
     symbol_table::{DynEntry64, Entry},
     ElfFile,
 };
-
-use crate::{consts::USER_STACK_INIT_SIZE, tasks::memset::MemType};
-use crate::{consts::USER_STACK_TOP, syscall::types::elf::elf};
 
 use super::task::UserTask;
 
@@ -131,8 +131,9 @@ pub fn init_task_stack(
     drop(tcb);
 
     // push stack
+    let ld_library_path = format!("LD_LIBRARY_PATH={}", get_libc_path());
     let envp = vec![
-        "LD_LIBRARY_PATH=/musl/lib",
+        &ld_library_path,
         "PS1=\x1b[1m\x1b[32mMonkeyOS\x1b[0m:\x1b[1m\x1b[34m\\w\x1b[0m\\$ \0",
         "PATH=/:/bin:/usr/bin",
         "UB_BINDIR=./",
